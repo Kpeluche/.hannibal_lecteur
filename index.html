@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Lecture Moderne - Organisez votre passion pour la lecture</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .bg-brand-yellow { background-color: #E8E541; }
+        .bg-brand-green { background-color: #097779; }
+        .bg-brand-red { background-color: #E31437; }
+        .bg-brand-purple { background-color: #8B5CF6; }
+        .bg-brand-orange { background-color: #F97316; }
+        .text-brand-yellow { color: #E8E541; }
+        .text-brand-green { color: #097779; }
+        .text-brand-red { color: #E31437; }
+        .text-brand-purple { color: #8B5CF6; }
+        .text-brand-orange { color: #F97316; }
+        .border-brand-yellow { border-color: #E8E541; }
+        .border-brand-green { border-color: #097779; }
+        .border-brand-red { border-color: #E31437; }
+        
+        .modern-header {
+            background: linear-gradient(135deg, #097779 0%, #E8E541 50%, #E31437 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .geometric-square {
+            position: absolute;
+            transform: rotate(45deg);
+            opacity: 0.1;
+        }
+        
+        .square-1 { top: -50px; left: 10%; width: 100px; height: 100px; background: white; }
+        .square-2 { top: 20px; right: 15%; width: 80px; height: 80px; background: #E31437; }
+        .square-3 { bottom: -30px; left: 20%; width: 60px; height: 60px; background: #E8E541; }
+        .square-4 { top: 50%; right: 5%; width: 120px; height: 120px; background: white; }
+        
+        .tab-active {
+            border-bottom: 3px solid #097779;
+            color: #097779;
+            background: rgba(9, 119, 121, 0.1);
+        }
+        
+        .card-yellow { background-color: #E8E541; }
+        .card-green { background-color: #097779; color: white; }
+        .card-red { background-color: #E31437; color: white; }
+        .card-purple { background-color: #8B5CF6; color: white; }
+        .card-orange { background-color: #F97316; color: white; }
+        .card-white { background-color: white; }
+        
+        .star-rating { color: #fbbf24; }
+        .star-empty { color: #d1d5db; }
+        
+        .priority-low { background-color: #10b981; color: white; }
+        .priority-medium { background-color: #f59e0b; color: white; }
+        .priority-high { background-color: #ef4444; color: white; }
+        
+        .filter-badge {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .filter-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .count-badge {
+            background: linear-gradient(45deg, #E31437, #E8E541);
+            color: white;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .image-container {
+            background: linear-gradient(45deg, #097779, #E8E541);
+            border-radius: 20px;
+            position: relative;
+        }
+        
+        .header-image-slot {
+            background: linear-gradient(45deg, #8B5CF6, #F97316);
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .header-image-slot:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .edit-btn {
+            background: linear-gradient(45deg, #8B5CF6, #F97316);
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .article-content {
+            min-height: 100px;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px dashed #ccc;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .article-content:hover {
+            border-color: #097779;
+            transform: translateY(-2px);
+        }
+        
+        .article-content.has-content {
+            border-style: solid;
+            border-color: #097779;
+        }
+        
+        .article-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        .color-zone {
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 120px;
+            transition: all 0.3s ease;
+        }
+        
+        .color-zone:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .editable-content {
+            outline: none;
+            min-height: 60px;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .editable-content:focus {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+        }
+        
+        @media print {
+            .tab-content { display: block !important; }
+            .hidden { display: block !important; }
+            .modern-header { page-break-inside: avoid; }
+            nav { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header Moderne -->
+    <header class="modern-header shadow-2xl">
+        <div class="geometric-square square-1"></div>
+        <div class="geometric-square square-2"></div>
+        <div class="geometric-square square-3"></div>
+        <div class="geometric-square square-4"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <!-- Titre et Images -->
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center space-x-6">
+                    <div class="image-container w-24 h-24 flex items-center justify-center shadow-xl">
+                        <i class="fas fa-book-reader text-4xl text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold text-white drop-shadow-lg">Gestionnaire de Lecture</h1>
+                        <p class="text-white text-lg opacity-90 drop-shadow">Organisez votre passion pour la lecture</p>
+                    </div>
+                </div>
+                <!-- Nouvel emplacement image à droite -->
+                <div class="header-image-slot w-32 h-32 flex items-center justify-center shadow-xl" id="header-image-slot" onclick="changeHeaderImage()">
+                    <div class="text-center">
+                        <i class="fas fa-image text-3xl text-white mb-2"></i>
+                        <p class="text-white text-sm">Ajouter une image</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filtres Principaux -->
+            <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-bold text-brand-green mb-4">Filtres Avancés</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Recherche -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">Recherche</label>
+                        <input type="text" placeholder="Rechercher..." class="w-full border-2 border-brand-green rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-yellow" id="global-search">
+                    </div>
+                    
+                    <!-- Filtre Couleur -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">Couleur</label>
+                        <select class="w-full border-2 border-brand-green rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-yellow" id="global-color-filter">
+                            <option value="">Toutes les couleurs</option>
+                            <option value="yellow">Jaune</option>
+                            <option value="green">Vert</option>
+                            <option value="red">Rouge</option>
+                            <option value="purple">Violet</option>
+                            <option value="orange">Orange</option>
+                            <option value="white">Blanc</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Filtre Étoiles -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">Note minimale</label>
+                        <select class="w-full border-2 border-brand-green rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-yellow" id="global-rating-filter">
+                            <option value="">Toutes les notes</option>
+                            <option value="1">1+ étoile</option>
+                            <option value="2">2+ étoiles</option>
+                            <option value="3">3+ étoiles</option>
+                            <option value="4">4+ étoiles</option>
+                            <option value="5">5 étoiles</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Filtre Nationalité -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">Nationalité</label>
+                        <select class="w-full border-2 border-brand-green rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-yellow" id="global-country-filter">
+                            <option value="">Tous les pays</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Filtre Genre -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">Genre</label>
+                        <select class="w-full border-2 border-brand-green rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-yellow" id="global-genre-filter">
+                            <option value="">Tous les genres</option>
+                            <option value="roman">Roman</option>
+                            <option value="science-fiction">Science-fiction</option>
+                            <option value="biographie">Biographie</option>
+                            <option value="essai">Essai</option>
+                            <option value="fantastique">Fantastique</option>
+                            <option value="thriller">Thriller</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs avec Compteurs -->
+    <nav class="bg-white border-b-2 border-gray-200 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-8">
+                <button class="tab-button tab-active py-4 px-6 border-b-2 font-medium text-sm rounded-t-lg flex items-center" data-tab="livres">
+                    <i class="fas fa-book-open mr-2 text-lg"></i>
+                    <span>Livres lus</span>
+                    <span class="count-badge ml-2 px-2 py-1 text-xs rounded-full" id="livres-count">0</span>
+                </button>
+                <button class="tab-button py-4 px-6 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 rounded-t-lg flex items-center" data-tab="souhaits">
+                    <i class="fas fa-heart mr-2 text-lg"></i>
+                    <span>Liste de souhaits</span>
+                    <span class="count-badge ml-2 px-2 py-1 text-xs rounded-full" id="souhaits-count">0</span>
+                </button>
+                <button class="tab-button py-4 px-6 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 rounded-t-lg flex items-center" data-tab="auteurs">
+                    <i class="fas fa-user-edit mr-2 text-lg"></i>
+                    <span>Auteurs</span>
+                    <span class="count-badge ml-2 px-2 py-1 text-xs rounded-full" id="auteurs-count">0</span>
+                </button>
+                <button class="tab-button py-4 px-6 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 rounded-t-lg flex items-center" data-tab="articles">
+                    <i class="fas fa-newspaper mr-2 text-lg"></i>
+                    <span>Articles</span>
+                    <span class="count-badge ml-2 px-2 py-1 text-xs rounded-full" id="articles-count">0</span>
+                </button>
+                <button class="tab-button py-4 px-6 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 rounded-t-lg flex items-center" data-tab="import-export">
+                    <i class="fas fa-exchange-alt mr-2 text-lg"></i>
+                    <span>Import/Export</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Livres Tab -->
+        <div id="livres-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-brand-green">Livres lus</h2>
+                <button onclick="openModal('livre-modal')" class="bg-brand-green text-white px-6 py-3 rounded-xl hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                    <i class="fas fa-plus mr-2"></i>Ajouter un livre
+                </button>
+            </div>
+            
+            <!-- Grille des livres -->
+            <div id="livres-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Les livres seront ajoutés ici dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Souhaits Tab -->
+        <div id="souhaits-tab" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-brand-green">Liste de souhaits</h2>
+                <button onclick="openModal('souhait-modal')" class="bg-brand-green text-white px-6 py-3 rounded-xl hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                    <i class="fas fa-plus mr-2"></i>Ajouter un souhait
+                </button>
+            </div>
+            
+            <!-- Grille des souhaits -->
+            <div id="souhaits-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Les souhaits seront ajoutés ici dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Auteurs Tab -->
+        <div id="auteurs-tab" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-brand-green">Auteurs</h2>
+                <button onclick="openModal('auteur-modal')" class="bg-brand-green text-white px-6 py-3 rounded-xl hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                    <i class="fas fa-plus mr-2"></i>Ajouter un auteur
+                </button>
+            </div>
+            
+            <!-- Grille des auteurs -->
+            <div id="auteurs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Les auteurs seront ajoutés ici dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Articles Tab -->
+        <div id="articles-tab" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-brand-green">Articles</h2>
+                <button onclick="openModal('article-modal')" class="bg-brand-green text-white px-6 py-3 rounded-xl hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                    <i class="fas fa-plus mr-2"></i>Ajouter un article
+                </button>
+            </div>
+            
+            <!-- Grille des articles -->
+            <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Les articles seront ajoutés ici dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Import/Export Tab -->
+        <div id="import-export-tab" class="tab-content hidden">
+            <div class="mb-6">
+                <h2 class="text-3xl font-bold text-brand-green mb-6">Import/Export</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <!-- Livres -->
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border-l-4 border-brand-yellow">
+                        <h3 class="text-xl font-semibold text-brand-green mb-6 flex items-center">
+                            <i class="fas fa-book mr-2"></i>Livres
+                        </h3>
+                        <div class="space-y-4">
+                            <button onclick="exportData('livres')" class="w-full bg-brand-yellow text-black px-6 py-3 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                                <i class="fas fa-download mr-2"></i>Exporter CSV
+                            </button>
+                            <div class="relative">
+                                <input type="file" id="import-livres" accept=".csv" class="hidden" onchange="importData('livres', this)">
+                                <button onclick="document.getElementById('import-livres').click()" class="w-full bg-brand-green text-white px-6 py-3 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                                    <i class="fas fa-upload mr-2"></i>Importer CSV
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Souhaits -->
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border-l-4 border-brand-red">
+                        <h3 class="text-xl font-semibold text-brand-green mb-6 flex items-center">
+                            <i class="fas fa-heart mr-2"></i>Souhaits
+                        </h3>
+                        <div class="space-y-4">
+                            <button onclick="exportData('souhaits')" class="w-full bg-brand-yellow text-black px-6 py-3 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                                <i class="fas fa-download mr-2"></i>Exporter CSV
+                            </button>
+                            <div class="relative">
+                                <input type="file" id="import-souhaits" accept=".csv" class="hidden" onchange="importData('souhaits', this)">
+                                <button onclick="document.getElementById('import-souhaits').click()" class="w-full bg-brand-green text-white px-6 py-3 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                                    <i class="fas fa-upload mr-2"></i>Importer CSV
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Auteurs -->
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border-l-4 border-brand-green">
+                        <h3 class="text-xl font-semibold text-brand-green mb-6 flex items-center">
+                            <i class="fas fa-user-edit mr-2"></i>Auteurs
+                        </h3>
+                        <div class="space-y-4">
+                            <button onclick="exportData('auteurs')" class="w-full bg-brand-yellow text-black px-6 py-3 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                                <i class="fas fa-download mr-2"></i>Exporter CSV
+                            </button>
+                            <div class="relative">
+                                <input type="file" id="import-auteurs" accept=".csv" class="hidden" onchange="importData('auteurs', this)">
+                                <button onclick="document.getElementById('import-auteurs').click()" class="w-full bg-brand-green text-white px-6 py-3 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                                    <i class="fas fa-upload mr-2"></i>Importer CSV
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Articles -->
+                    <div class="bg-white p-8 rounded-2xl shadow-xl border-l-4 border-brand-purple">
+                        <h3 class="text-xl font-semibold text-brand-green mb-6 flex items-center">
+                            <i class="fas fa-newspaper mr-2"></i>Articles
+                        </h3>
+                        <div class="space-y-4">
+                            <button onclick="exportData('articles')" class="w-full bg-brand-yellow text-black px-6 py-3 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                                <i class="fas fa-download mr-2"></i>Exporter CSV
+                            </button>
+                            <div class="relative">
+                                <input type="file" id="import-articles" accept=".csv" class="hidden" onchange="importData('articles', this)">
+                                <button onclick="document.getElementById('import-articles').click()" class="w-full bg-brand-green text-white px-6 py-3 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                                    <i class="fas fa-upload mr-2"></i>Importer CSV
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal pour ajouter/modifier un livre -->
+    <div id="livre-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-brand-green" id="livre-modal-title">Ajouter un livre</h3>
+                    <button onclick="closeModal('livre-modal')" class="text-gray-500 hover:text-gray-700 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="livre-form" class="space-y-4">
+                    <input type="hidden" name="id" value="">
+                    <input type="text" name="titre" placeholder="Titre" required class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <input type="text" name="auteur" placeholder="Auteur" required class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <input type="text" name="pays" placeholder="Pays" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <input type="number" name="annee" placeholder="Année" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <input type="text" name="genre" placeholder="Genre" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <input type="text" name="editeur" placeholder="Éditeur" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Note</label>
+                        <div class="flex space-x-1">
+                            <button type="button" class="star-button text-3xl" data-rating="1">★</button>
+                            <button type="button" class="star-button text-3xl" data-rating="2">★</button>
+                            <button type="button" class="star-button text-3xl" data-rating="3">★</button>
+                            <button type="button" class="star-button text-3xl" data-rating="4">★</button>
+                            <button type="button" class="star-button text-3xl" data-rating="5">★</button>
+                        </div>
+                        <input type="hidden" name="note" value="0">
+                    </div>
+                    <textarea name="notes" placeholder="Notes personnelles" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 h-24 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow"></textarea>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Couleur</label>
+                        <div class="flex space-x-3">
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-yellow border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="yellow"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-green border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="green"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-red border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="red"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-purple border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="purple"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-orange border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="orange"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-white border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="white"></button>
+                        </div>
+                        <input type="hidden" name="couleur" value="white">
+                    </div>
+                    <div class="flex space-x-3 pt-4">
+                        <button type="submit" class="flex-1 bg-brand-green text-white py-3 px-6 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                            <span id="livre-submit-text">Ajouter</span>
+                        </button>
+                        <button type="button" onclick="closeModal('livre-modal')" class="flex-1 bg-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-400 shadow-lg transform hover:scale-105 transition-all">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter/modifier un souhait -->
+    <div id="souhait-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-brand-green" id="souhait-modal-title">Ajouter un souhait</h3>
+                    <button onclick="closeModal('souhait-modal')" class="text-gray-500 hover:text-gray-700 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="souhait-form" class="space-y-4">
+                    <input type="hidden" name="id" value="">
+                    <input type="text" name="titre" placeholder="Titre" required class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <input type="text" name="auteur" placeholder="Auteur" required class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <select name="priorite" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                        <option value="faible">Faible</option>
+                        <option value="moyen">Moyen</option>
+                        <option value="fort">Fort</option>
+                    </select>
+                    <textarea name="notes" placeholder="Notes personnelles" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 h-24 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow"></textarea>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Couleur</label>
+                        <div class="flex space-x-3">
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-yellow border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="yellow"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-green border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="green"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-red border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="red"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-purple border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="purple"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-orange border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="orange"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-white border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="white"></button>
+                        </div>
+                        <input type="hidden" name="couleur" value="white">
+                    </div>
+                    <div class="flex space-x-3 pt-4">
+                        <button type="submit" class="flex-1 bg-brand-green text-white py-3 px-6 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                            <span id="souhait-submit-text">Ajouter</span>
+                        </button>
+                        <button type="button" onclick="closeModal('souhait-modal')" class="flex-1 bg-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-400 shadow-lg transform hover:scale-105 transition-all">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter/modifier un auteur -->
+    <div id="auteur-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-brand-green" id="auteur-modal-title">Ajouter un auteur</h3>
+                    <button onclick="closeModal('auteur-modal')" class="text-gray-500 hover:text-gray-700 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="auteur-form" class="space-y-4">
+                    <input type="hidden" name="id" value="">
+                    <input type="text" name="nom" placeholder="Nom" required class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <input type="text" name="pays" placeholder="Pays" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <input type="date" name="naissance" placeholder="Date de naissance" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <input type="text" name="genre" placeholder="Genre de prédilection" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    <textarea name="notes" placeholder="Notes personnelles" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 h-24 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow"></textarea>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Couleur</label>
+                        <div class="flex space-x-3">
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-yellow border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="yellow"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-green border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="green"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-red border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="red"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-purple border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="purple"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-orange border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="orange"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-white border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="white"></button>
+                        </div>
+                        <input type="hidden" name="couleur" value="white">
+                    </div>
+                    <div class="flex space-x-3 pt-4">
+                        <button type="submit" class="flex-1 bg-brand-green text-white py-3 px-6 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                            <span id="auteur-submit-text">Ajouter</span>
+                        </button>
+                        <button type="button" onclick="closeModal('auteur-modal')" class="flex-1 bg-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-400 shadow-lg transform hover:scale-105 transition-all">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter/modifier un article -->
+    <div id="article-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl max-w-2xl w-full p-8 shadow-2xl max-h-screen overflow-y-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-brand-green" id="article-modal-title">Ajouter un article</h3>
+                    <button onclick="closeModal('article-modal')" class="text-gray-500 hover:text-gray-700 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="article-form" class="space-y-4">
+                    <input type="hidden" name="id" value="">
+                    <input type="text" name="titre" placeholder="Titre de l'article" required class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Couleur de fond</label>
+                        <div class="flex space-x-3">
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-yellow border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="yellow"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-green border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="green"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-red border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="red"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-purple border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="purple"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-brand-orange border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="orange"></button>
+                            <button type="button" class="color-button w-10 h-10 rounded-full bg-white border-2 border-gray-300 transform hover:scale-110 transition-all" data-color="white"></button>
+                        </div>
+                        <input type="hidden" name="couleur" value="white">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Contenu de l'article</label>
+                        <textarea name="contenu" placeholder="Écrivez votre article ici..." class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 h-32 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Image (URL)</label>
+                        <input type="url" name="image" placeholder="https://exemple.com/image.jpg" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:border-brand-green focus:ring-2 focus:ring-brand-yellow">
+                        <p class="text-xs text-gray-500 mt-1">Collez l'URL d'une image en ligne</p>
+                    </div>
+                    
+                    <div class="flex space-x-3 pt-4">
+                        <button type="submit" class="flex-1 bg-brand-green text-white py-3 px-6 rounded-lg hover:bg-opacity-80 shadow-lg transform hover:scale-105 transition-all">
+                            <span id="article-submit-text">Ajouter</span>
+                        </button>
+                        <button type="button" onclick="closeModal('article-modal')" class="flex-1 bg-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-400 shadow-lg transform hover:scale-105 transition-all">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input caché pour image du header -->
+    <input type="file" id="header-image-input" accept="image/*" class="hidden">
+
+    <script>
+        // Données globales
+        let livres = JSON.parse(localStorage.getItem('livres')) || [];
+        let souhaits = JSON.parse(localStorage.getItem('souhaits')) || [];
+        let auteurs = JSON.parse(localStorage.getItem('auteurs')) || [];
+        let articles = JSON.parse(localStorage.getItem('articles')) || [];
+        let currentRating = 0;
+        let editingItem = null;
+        let headerImageUrl = localStorage.getItem('headerImageUrl') || '';
+
+        // Variables de filtrage global
+        let globalFilters = {
+            search: '',
+            color: '',
+            rating: '',
+            country: '',
+            genre: ''
+        };
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCounts();
+            updateCountryFilter();
+            renderLivres();
+            renderSouhaits();
+            renderAuteurs();
+            renderArticles();
+            loadHeaderImage();
+            setupHeaderImageUpload();
+        });
+
+        // Gestion de l'image du header
+        function loadHeaderImage() {
+            if (headerImageUrl) {
+                const headerSlot = document.getElementById('header-image-slot');
+                headerSlot.innerHTML = `<img src="${headerImageUrl}" alt="Header Image" class="w-full h-full object-cover rounded-2xl">`;
+            }
+        }
+
+        function setupHeaderImageUpload() {
+            const input = document.getElementById('header-image-input');
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        headerImageUrl = e.target.result;
+                        localStorage.setItem('headerImageUrl', headerImageUrl);
+                        loadHeaderImage();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function changeHeaderImage() {
+            document.getElementById('header-image-input').click();
+        }
+
+        // Gestion des onglets
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                // Désactiver tous les onglets
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    btn.classList.remove('text-brand-green');
+                });
+                
+                // Activer l'onglet cliqué
+                this.classList.add('tab-active');
+                this.classList.remove('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                this.classList.add('text-brand-green');
+                
+                // Cacher tous les contenus
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                // Afficher le contenu correspondant
+                document.getElementById(tabName + '-tab').classList.remove('hidden');
+            });
+        });
+
+        // Gestion des filtres globaux
+        document.getElementById('global-search').addEventListener('input', function() {
+            globalFilters.search = this.value.toLowerCase();
+            applyGlobalFilters();
+        });
+
+        document.getElementById('global-color-filter').addEventListener('change', function() {
+            globalFilters.color = this.value;
+            applyGlobalFilters();
+        });
+
+        document.getElementById('global-rating-filter').addEventListener('change', function() {
+            globalFilters.rating = this.value;
+            applyGlobalFilters();
+        });
+
+        document.getElementById('global-country-filter').addEventListener('change', function() {
+            globalFilters.country = this.value;
+            applyGlobalFilters();
+        });
+
+        document.getElementById('global-genre-filter').addEventListener('change', function() {
+            globalFilters.genre = this.value;
+            applyGlobalFilters();
+        });
+
+        function applyGlobalFilters() {
+            renderLivres();
+            renderSouhaits();
+            renderAuteurs();
+            renderArticles();
+            updateCounts();
+            updateCountryFilter();
+        }
+
+        function updateCountryFilter() {
+            const countrySelect = document.getElementById('global-country-filter');
+            const countries = new Set();
+            
+            [...livres, ...auteurs].forEach(item => {
+                if (item.pays && item.pays.trim()) {
+                    countries.add(item.pays.trim());
+                }
+            });
+
+            const currentValue = countrySelect.value;
+            countrySelect.innerHTML = '<option value="">Tous les pays</option>';
+            
+            Array.from(countries).sort().forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                countrySelect.appendChild(option);
+            });
+            
+            countrySelect.value = currentValue;
+        }
+
+        function updateCounts() {
+            const filteredLivres = filterData(livres, 'livres');
+            const filteredSouhaits = filterData(souhaits, 'souhaits');
+            const filteredAuteurs = filterData(auteurs, 'auteurs');
+            const filteredArticles = filterData(articles, 'articles');
+            
+            document.getElementById('livres-count').textContent = filteredLivres.length;
+            document.getElementById('souhaits-count').textContent = filteredSouhaits.length;
+            document.getElementById('auteurs-count').textContent = filteredAuteurs.length;
+            document.getElementById('articles-count').textContent = filteredArticles.length;
+        }
+
+        function filterData(data, type) {
+            return data.filter(item => {
+                // Filtre de recherche
+                if (globalFilters.search) {
+                    const searchText = Object.values(item).join(' ').toLowerCase();
+                    if (!searchText.includes(globalFilters.search)) return false;
+                }
+                
+                // Filtre couleur
+                if (globalFilters.color && item.couleur !== globalFilters.color) {
+                    return false;
+                }
+                
+                // Filtre note (seulement pour les livres)
+                if (globalFilters.rating && type === 'livres') {
+                    const minRating = parseInt(globalFilters.rating);
+                    if (parseInt(item.note || 0) < minRating) return false;
+                }
+                
+                // Filtre pays
+                if (globalFilters.country && item.pays !== globalFilters.country) {
+                    return false;
+                }
+                
+                // Filtre genre
+                if (globalFilters.genre && item.genre !== globalFilters.genre) {
+                    return false;
+                }
+                
+                return true;
+            });
+        }
+
+        // Gestion des modals
+        function openModal(modalId, editItem = null) {
+            editingItem = editItem;
+            const modal = document.getElementById(modalId);
+            const form = modal.querySelector('form');
+            const title = modal.querySelector('[id$="-modal-title"]');
+            const submitText = modal.querySelector('[id$="-submit-text"]');
+            
+            if (editItem) {
+                // Mode édition
+                title.textContent = title.textContent.replace('Ajouter', 'Modifier');
+                submitText.textContent = 'Modifier';
+                
+                // Remplir le formulaire avec les données existantes
+                Object.keys(editItem).forEach(key => {
+                    const input = form.querySelector(`[name="${key}"]`);
+                    if (input) {
+                        input.value = editItem[key] || '';
+                    }
+                });
+                
+                // Gérer les étoiles pour les livres
+                if (modalId === 'livre-modal' && editItem.note) {
+                    updateStars(form, parseInt(editItem.note));
+                }
+                
+                // Gérer la couleur
+                if (editItem.couleur) {
+                    const colorButton = form.querySelector(`[data-color="${editItem.couleur}"]`);
+                    if (colorButton) {
+                        selectColor(colorButton);
+                    }
+                }
+            } else {
+                // Mode ajout
+                title.textContent = title.textContent.replace('Modifier', 'Ajouter');
+                submitText.textContent = 'Ajouter';
+                form.reset();
+                resetFormState(form);
+            }
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            editingItem = null;
+            
+            // Réinitialiser le formulaire
+            const form = document.querySelector(`#${modalId} form`);
+            if (form) {
+                form.reset();
+                resetFormState(form);
+            }
+        }
+
+        function resetFormState(form) {
+            // Réinitialiser les étoiles
+            const stars = form.querySelectorAll('.star-button');
+            stars.forEach(star => {
+                star.classList.remove('star-rating');
+                star.classList.add('star-empty');
+            });
+            
+            // Réinitialiser la sélection de couleur
+            const colorButtons = form.querySelectorAll('.color-button');
+            colorButtons.forEach(btn => {
+                btn.classList.remove('ring-4', 'ring-blue-500');
+            });
+            
+            currentRating = 0;
+        }
+
+        function updateStars(form, rating) {
+            const stars = form.querySelectorAll('.star-button');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('star-rating');
+                    star.classList.remove('star-empty');
+                } else {
+                    star.classList.remove('star-rating');
+                    star.classList.add('star-empty');
+                }
+            });
+            currentRating = rating;
+        }
+
+        function selectColor(button) {
+            const form = button.closest('form');
+            form.querySelectorAll('.color-button').forEach(btn => {
+                btn.classList.remove('ring-4', 'ring-blue-500');
+            });
+            button.classList.add('ring-4', 'ring-blue-500');
+            form.querySelector('input[name="couleur"]').value = button.getAttribute('data-color');
+        }
+
+        // Gestion des étoiles
+        document.querySelectorAll('.star-button').forEach(star => {
+            star.addEventListener('click', function(e) {
+                e.preventDefault();
+                const rating = parseInt(this.getAttribute('data-rating'));
+                const form = this.closest('form');
+                updateStars(form, rating);
+                form.querySelector('input[name="note"]').value = rating;
+            });
+        });
+
+        // Gestion des couleurs
+        document.querySelectorAll('.color-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                selectColor(this);
+            });
+        });
+
+        // Gestion des formulaires
+        document.getElementById('livre-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            const livre = {
+                id: editingItem ? editingItem.id : Date.now(),
+                titre: formData.get('titre'),
+                auteur: formData.get('auteur'),
+                pays: formData.get('pays'),
+                annee: formData.get('annee'),
+                genre: formData.get('genre'),
+                editeur: formData.get('editeur'),
+                note: formData.get('note'),
+                notes: formData.get('notes'),
+                couleur: formData.get('couleur')
+            };
+            
+            if (editingItem) {
+                const index = livres.findIndex(l => l.id === editingItem.id);
+                if (index !== -1) {
+                    livres[index] = livre;
+                }
+            } else {
+                livres.push(livre);
+            }
+            
+            localStorage.setItem('livres', JSON.stringify(livres));
+            renderLivres();
+            updateCounts();
+            updateCountryFilter();
+            closeModal('livre-modal');
+        });
+
+        document.getElementById('souhait-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            const souhait = {
+                id: editingItem ? editingItem.id : Date.now(),
+                titre: formData.get('titre'),
+                auteur: formData.get('auteur'),
+                priorite: formData.get('priorite'),
+                notes: formData.get('notes'),
+                couleur: formData.get('couleur')
+            };
+            
+            if (editingItem) {
+                const index = souhaits.findIndex(s => s.id === editingItem.id);
+                if (index !== -1) {
+                    souhaits[index] = souhait;
+                }
+            } else {
+                souhaits.push(souhait);
+            }
+            
+            localStorage.setItem('souhaits', JSON.stringify(souhaits));
+            renderSouhaits();
+            updateCounts();
+            closeModal('souhait-modal');
+        });
+
+        document.getElementById('auteur-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            const auteur = {
+                id: editingItem ? editingItem.id : Date.now(),
+                nom: formData.get('nom'),
+                pays: formData.get('pays'),
+                naissance: formData.get('naissance'),
+                genre: formData.get('genre'),
+                notes: formData.get('notes'),
+                couleur: formData.get('couleur')
+            };
+            
+            if (editingItem) {
+                const index = auteurs.findIndex(a => a.id === editingItem.id);
+                if (index !== -1) {
+                    auteurs[index] = auteur;
+                }
+            } else {
+                auteurs.push(auteur);
+            }
+            
+            localStorage.setItem('auteurs', JSON.stringify(auteurs));
+            renderAuteurs();
+            updateCounts();
+            updateCountryFilter();
+            closeModal('auteur-modal');
+        });
+
+        document.getElementById('article-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            const article = {
+                id: editingItem ? editingItem.id : Date.now(),
+                titre: formData.get('titre'),
+                contenu: formData.get('contenu'),
+                image: formData.get('image'),
+                couleur: formData.get('couleur'),
+                date: new Date().toLocaleDateString('fr-FR')
+            };
+            
+            if (editingItem) {
+                const index = articles.findIndex(a => a.id === editingItem.id);
+                if (index !== -1) {
+                    articles[index] = article;
+                }
+            } else {
+                articles.push(article);
+            }
+            
+            localStorage.setItem('articles', JSON.stringify(articles));
+            renderArticles();
+            updateCounts();
+            closeModal('article-modal');
+        });
+
+        // Fonctions de rendu
+        function renderLivres() {
+            const grid = document.getElementById('livres-grid');
+            grid.innerHTML = '';
+            
+            const filteredLivres = filterData(livres, 'livres');
+            
+            filteredLivres.forEach(livre => {
+                const card = document.createElement('div');
+                card.className = `p-6 rounded-2xl shadow-xl card-${livre.couleur} ${livre.couleur === 'white' ? 'border-2 border-gray-200' : ''} transform hover:scale-105 transition-all`;
+                
+                const stars = Array.from({length: 5}, (_, i) => {
+                    return `<span class="${i < livre.note ? 'star-rating' : 'star-empty'} text-xl">★</span>`;
+                }).join('');
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="font-bold text-xl">${livre.titre}</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="openModal('livre-modal', ${JSON.stringify(livre).replace(/"/g, '&quot;')})" class="edit-btn text-white px-3 py-1 rounded-full text-sm shadow-lg">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteLivre(${livre.id})" class="bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-red-600 shadow-lg">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-sm opacity-75 mb-2 font-medium">Par ${livre.auteur}</p>
+                    <p class="text-sm opacity-75 mb-2">${livre.pays || ''} ${livre.annee || ''}</p>
+                    <p class="text-sm opacity-75 mb-3">${livre.genre || ''} - ${livre.editeur || ''}</p>
+                    <div class="mb-3">${stars}</div>
+                    <p class="text-sm leading-relaxed">${livre.notes || ''}</p>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function renderSouhaits() {
+            const grid = document.getElementById('souhaits-grid');
+            grid.innerHTML = '';
+            
+            const filteredSouhaits = filterData(souhaits, 'souhaits');
+            
+            filteredSouhaits.forEach(souhait => {
+                const card = document.createElement('div');
+                card.className = `p-6 rounded-2xl shadow-xl card-${souhait.couleur} ${souhait.couleur === 'white' ? 'border-2 border-gray-200' : ''} transform hover:scale-105 transition-all`;
+                
+                let prioriteClass = 'priority-low';
+                if (souhait.priorite === 'moyen') prioriteClass = 'priority-medium';
+                if (souhait.priorite === 'fort') prioriteClass = 'priority-high';
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="font-bold text-xl">${souhait.titre}</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="openModal('souhait-modal', ${JSON.stringify(souhait).replace(/"/g, '&quot;')})" class="edit-btn text-white px-3 py-1 rounded-full text-sm shadow-lg">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteSouhait(${souhait.id})" class="bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-red-600 shadow-lg">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-sm opacity-75 mb-2 font-medium">Par ${souhait.auteur}</p>
+                    <div class="mb-3">
+                        <span class="px-2 py-1 rounded-full text-xs ${prioriteClass}">
+                            ${souhait.priorite.charAt(0).toUpperCase() + souhait.priorite.slice(1)}
+                        </span>
+                    </div>
+                    <p class="text-sm leading-relaxed">${souhait.notes || ''}</p>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function renderAuteurs() {
+            const grid = document.getElementById('auteurs-grid');
+            grid.innerHTML = '';
+            
+            const filteredAuteurs = filterData(auteurs, 'auteurs');
+            
+            filteredAuteurs.forEach(auteur => {
+                const card = document.createElement('div');
+                card.className = `p-6 rounded-2xl shadow-xl card-${auteur.couleur} ${auteur.couleur === 'white' ? 'border-2 border-gray-200' : ''} transform hover:scale-105 transition-all`;
+                
+                const age = auteur.naissance ? new Date().getFullYear() - new Date(auteur.naissance).getFullYear() : '';
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="font-bold text-xl">${auteur.nom}</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="openModal('auteur-modal', ${JSON.stringify(auteur).replace(/"/g, '&quot;')})" class="edit-btn text-white px-3 py-1 rounded-full text-sm shadow-lg">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteAuteur(${auteur.id})" class="bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-red-600 shadow-lg">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-sm opacity-75 mb-2">${auteur.pays || ''} ${age ? `(${age} ans)` : ''}</p>
+                    <p class="text-sm opacity-75 mb-3 font-medium">${auteur.genre || ''}</p>
+                    <p class="text-sm leading-relaxed">${auteur.notes || ''}</p>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function renderArticles() {
+            const grid = document.getElementById('articles-grid');
+            grid.innerHTML = '';
+            
+            const filteredArticles = filterData(articles, 'articles');
+            
+            filteredArticles.forEach(article => {
+                const card = document.createElement('div');
+                card.className = `color-zone card-${article.couleur} ${article.couleur === 'white' ? 'border-2 border-gray-200' : ''} shadow-xl`;
+                
+                const imageHtml = article.image ? `<img src="${article.image}" alt="${article.titre}" class="article-image w-full max-w-md mx-auto">` : '';
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="font-bold text-xl">${article.titre}</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="openModal('article-modal', ${JSON.stringify(article).replace(/"/g, '&quot;')})" class="edit-btn text-white px-3 py-1 rounded-full text-sm shadow-lg">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteArticle(${article.id})" class="bg-red-500 text-white px-3 py-1 rounded-full text-sm hover:bg-red-600 shadow-lg">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-sm opacity-75 mb-3"><i class="fas fa-calendar mr-1"></i>${article.date}</p>
+                    ${imageHtml}
+                    <div class="text-sm leading-relaxed whitespace-pre-wrap">${article.contenu || ''}</div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Fonctions de suppression
+        function deleteLivre(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')) {
+                livres = livres.filter(l => l.id !== id);
+                localStorage.setItem('livres', JSON.stringify(livres));
+                renderLivres();
+                updateCounts();
+                updateCountryFilter();
+            }
+        }
+
+        function deleteSouhait(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce souhait ?')) {
+                souhaits = souhaits.filter(s => s.id !== id);
+                localStorage.setItem('souhaits', JSON.stringify(souhaits));
+                renderSouhaits();
+                updateCounts();
+            }
+        }
+
+        function deleteAuteur(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet auteur ?')) {
+                auteurs = auteurs.filter(a => a.id !== id);
+                localStorage.setItem('auteurs', JSON.stringify(auteurs));
+                renderAuteurs();
+                updateCounts();
+                updateCountryFilter();
+            }
+        }
+
+        function deleteArticle(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
+                articles = articles.filter(a => a.id !== id);
+                localStorage.setItem('articles', JSON.stringify(articles));
+                renderArticles();
+                updateCounts();
+            }
+        }
+
+        // Fonctions d'import/export
+        function exportData(type) {
+            let data, filename;
+            
+            switch(type) {
+                case 'livres':
+                    data = livres;
+                    filename = 'livres.csv';
+                    break;
+                case 'souhaits':
+                    data = souhaits;
+                    filename = 'souhaits.csv';
+                    break;
+                case 'auteurs':
+                    data = auteurs;
+                    filename = 'auteurs.csv';
+                    break;
+                case 'articles':
+                    data = articles;
+                    filename = 'articles.csv';
+                    break;
+            }
+            
+            if (data.length === 0) {
+                alert('Aucune donnée à exporter');
+                return;
+            }
+            
+            const headers = Object.keys(data[0]).join(',');
+            const rows = data.map(item => Object.values(item).map(value => `"${value}"`).join(','));
+            const csv = [headers, ...rows].join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function importData(type, input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const csv = e.target.result;
+                const lines = csv.split('\n');
+                const headers = lines[0].split(',');
+                
+                const data = lines.slice(1).map(line => {
+                    const values = line.split(',').map(value => value.replace(/"/g, ''));
+                    const obj = {};
+                    headers.forEach((header, index) => {
+                        obj[header] = values[index] || '';
+                    });
+                    return obj;
+                }).filter(obj => obj[headers[0]]); // Filtrer les lignes vides
+                
+                switch(type) {
+                    case 'livres':
+                        livres = [...livres, ...data];
+                        localStorage.setItem('livres', JSON.stringify(livres));
+                        renderLivres();
+                        break;
+                    case 'souhaits':
+                        souhaits = [...souhaits, ...data];
+                        localStorage.setItem('souhaits', JSON.stringify(souhaits));
+                        renderSouhaits();
+                        break;
+                    case 'auteurs':
+                        auteurs = [...auteurs, ...data];
+                        localStorage.setItem('auteurs', JSON.stringify(auteurs));
+                        renderAuteurs();
+                        break;
+                    case 'articles':
+                        articles = [...articles, ...data];
+                        localStorage.setItem('articles', JSON.stringify(articles));
+                        renderArticles();
+                        break;
+                }
+                
+                updateCounts();
+                updateCountryFilter();
+                alert('Données importées avec succès !');
+            };
+            
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>
